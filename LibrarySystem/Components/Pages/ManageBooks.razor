@@ -1,0 +1,145 @@
+﻿@page "/ManageBooks"
+@inject BookTable books
+@inject LibraryDB Connection
+@using LibrarySystem.ClassPackage.Domain
+@using LibrarySystem.ClassPackage.Persistence
+
+
+<h1>Add New Book</h1>
+
+<p>"Add New Book to system"</p>
+
+
+<label>
+    ISBN:
+    <InputText @bind-Value="isbnInput" />
+</label>
+
+<label>
+    Title:
+    <InputText @bind-Value="titleInput" />
+</label>
+
+<label>
+    Author:
+    <InputText @bind-Value="authorInput" />
+</label>
+
+<label>
+    Availability:
+    <InputText @bind-Value="availabilityInput" />
+</label>
+
+<label>
+    Quantity:
+    <InputText @bind-Value="quantityInput" />
+</label>
+
+
+
+<button class="btn btn-primary" @onclick="InsertBook">Add Book</button>
+
+<label>
+    Search Book:
+    <InputText @bind-Value="searchInput" />
+</label>
+<button class="btn btn-primary" @onclick="FindBook">Search for Clients</button>
+
+<h1>Found Books</h1>
+<table>
+    <thead>
+        <tr>
+            <th>ISBN</th>
+            <th>Title</th>
+            <th>Author</th>
+            <th>Genre</th>
+            <th>Available</th>
+            <th>Quantity</th>
+        </tr>
+    </thead>
+    <tbody>
+        @*if statement, if the list is empty no items will be displayed.*@
+        @if (bookList != null)
+        {
+            @*when there are items, they will be displayed using this information*@
+            @foreach (var copy in bookList)
+            {
+                <tr>
+                    <td>@copy.isbn</td>
+                    <td>@copy.title</td>
+                    <td>@copy.author</td>
+                    <td>@copy.genre</td>
+                    <td>@copy.available</td>
+                    <td>@copy.quantity</td>
+                    <td>
+                        <a href="/AddEditItem/@copy.isbn" class="btn btn-warning">Edit Books</a> @*link/button to adit an item*@
+                        <button class="btn btn-sm btn-danger" @onclick="()=>DeleteBook(copy)">Delete Book</button> @*link/button that will delete the specified item*@
+                    </td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>
+
+
+
+
+
+@code {
+    private string isbnInput { get; set; } = string.Empty;    
+    private string titleInput { get; set; } = string.Empty;
+    private string authorInput { get; set; } = string.Empty;
+    private string genreInput { get; set; } = string.Empty;
+    private string quantityInput { get; set; } = string.Empty;
+    private string availabilityInput { get; set; } = string.Empty;
+    private string searchInput;
+    private List<BookTable> bookList;
+    private string errorMessage;
+
+    protected override void OnInitialized()
+    {
+        isbnInput = "Empty";
+        titleInput = "Empty";
+        authorInput = "Empty";
+        availabilityInput = "Empty";
+        quantityInput = "Empty";
+    }
+
+    private void InsertBook()
+    {
+        BookTable book = new BookTable
+            {
+                isbn = Int32.Parse(isbnInput),
+                title = titleInput,
+                author = authorInput,
+                genre = genreInput,
+                available = Convert.ToBoolean(availabilityInput),
+                quantity = Int32.Parse(quantityInput)
+            };
+
+        Connection.InsertBook(book);
+        isbnInput = "Empty";
+        titleInput = "Empty";
+        authorInput = "Empty";
+        availabilityInput = "Empty";
+        quantityInput = "Empty";
+    }
+    private void FindBook()
+    {
+        List<BookTable> bookList = Connection.GetBooks();
+    }
+    private void DeleteBook(BookTable book) // method to delete an item
+    {
+        try
+        {           
+            Connection.DeleteBook(book);            
+        }
+        catch (Exception ex) // error message if the item cannot be deleted
+        {
+            errorMessage = ex.Message;
+        }
+
+    }
+
+
+}
