@@ -18,8 +18,10 @@ namespace LibrarySystem.ClassPackage.Persistence
             SQLiteOpenFlags.ReadWrite | SQLiteOpenFlags.Create | SQLiteOpenFlags.SharedCache;  // was having issues with multiple tables being created, however when these flags were added, it helped manage more tables
 
         public LibraryDB(string dbPath)
-        {           
-            connection = new SQLiteAsyncConnection(dbPath, Flags);
+        {
+            if (connection != null)
+                return;
+            connection = new SQLiteAsyncConnection(dbPath);
             connection.CreateTableAsync<ClientTable>().Wait(); // client = table name(constructor class for clientTable has parameters for table creation)
             connection.CreateTableAsync<BookTable>().Wait();  // book = book table name (constructor class for bookTable will have all parameters for table creation)
             connection.CreateTableAsync<CheckoutTable>().Wait(); // Checkout = checkout table name (constructor class for chekcoutTable will have the parameters for table creation)

@@ -49,10 +49,10 @@
         </tr>
     </thead>
     <tbody>
-        @*if statement, if the list is empty no items will be displayed.*@
+        
         @if (clientList != null)
         {
-            @*when there are items, they will be displayed using this information*@
+            
             @foreach (var person in clientList)
             {
                 <tr>
@@ -61,8 +61,8 @@
                     <td>@person.lastName</td>
                     <td>@person.city</td>                   
                     <td>
-                        <a href="/AddEditItem/@person.customerID" class="btn btn-warning">Edit Client</a> @*link/button to adit an item*@
-                        <button class="btn btn-sm btn-danger" @onclick="()=>DeleteClient(person)">Delete Client</button> @*link/button that will delete the specified item*@
+                        <a href="/AddEditItem/@person.customerID" class="btn btn-warning">Edit Client</a> 
+                        <button class="btn btn-sm btn-danger" @onclick="()=>DeleteClient(person)">Delete Client</button> 
                     </td>
                 </tr>
             }
@@ -112,18 +112,17 @@
     }
 
 
-    private void DeleteClient(ClientTable client) // method to delete an item
+    private async Task DeleteClient(ClientTable client) // method to delete an item
     {
         try
         {            
-            Connection.DeleteClientAsync(client);
+            await Connection.DeleteClientAsync(client);
+            clientList = await Connection.GetAllClientsAsync();
         }
         catch (Exception ex) // error message if the item cannot be deleted
         {
             errorMessage = ex.Message;
         }
 
-    }
-
-    
+    }    
 }

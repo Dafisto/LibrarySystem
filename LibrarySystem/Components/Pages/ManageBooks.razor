@@ -58,10 +58,10 @@
         </tr>
     </thead>
     <tbody>
-        @*if statement, if the list is empty no items will be displayed.*@
+        
         @if (bookList != null)
         {
-            @*when there are items, they will be displayed using this information*@
+            
             @foreach (var copy in bookList)
             {
                 <tr>
@@ -72,8 +72,8 @@
                     <td>@copy.available</td>
                     <td>@copy.quantity</td>
                     <td>
-                        <a href="/AddEditItem/@copy.isbn" class="btn btn-warning">Edit Books</a> @*link/button to adit an item*@
-                        <button class="btn btn-sm btn-danger" @onclick="()=>DeleteBook(copy)">Delete Book</button> @*link/button that will delete the specified item*@
+                        <a href="/AddEditItem/@copy.isbn" class="btn btn-warning">Edit Books</a> 
+                        <button class="btn btn-sm btn-danger" @onclick="()=>DeleteBook(copy)">Delete Book</button> 
                     </td>
                 </tr>
             }
@@ -132,7 +132,8 @@
     {
         try
         {           
-            await Connection.DeleteBookAsync(book);            
+            await Connection.DeleteBookAsync(book);
+            bookList = await Connection.GetAllBooksAsync();
         }
         catch (Exception ex) // error message if the item cannot be deleted
         {
