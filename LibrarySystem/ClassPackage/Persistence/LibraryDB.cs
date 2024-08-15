@@ -13,68 +13,76 @@ namespace LibrarySystem.ClassPackage.Persistence
 {
     public class LibraryDB
     {
-        private readonly SQLiteConnection connection;
+        private readonly SQLiteAsyncConnection connection;
+        public const SQLiteOpenFlags Flags =
+            SQLiteOpenFlags.ReadWrite | SQLiteOpenFlags.Create | SQLiteOpenFlags.SharedCache;  // was having issues with multiple tables being created, however when these flags were added, it helped manage more tables
+
         public LibraryDB(string dbPath)
-        {
-            connection = new SQLiteConnection(dbPath);
-            connection.CreateTable<ClientTable>();
-            connection.CreateTable<BookTable>();
-            connection.CreateTable<CheckoutTable>();
+        {           
+            connection = new SQLiteAsyncConnection(dbPath, Flags);
+            connection.CreateTableAsync<ClientTable>().Wait(); // client = table name(constructor class for clientTable has parameters for table creation)
+            connection.CreateTableAsync<BookTable>().Wait();  // book = book table name (constructor class for bookTable will have all parameters for table creation)
+            connection.CreateTableAsync<CheckoutTable>().Wait(); // Checkout = checkout table name (constructor class for chekcoutTable will have the parameters for table creation)
         }
         //The sql commands for client table manipulation
 
-        public void InsertClient(ClientTable client) // saves the item to the database
+        public Task<int> InsertClientAsync(ClientTable client) // This will save client to client database or update the client
         {
-            if (client.customerID != 0) // if the item already exists
+            if(client.customerID != 0)
             {
-                connection.Insert(client); // updates the item
+                return connection.UpdateAsync(client);  //updates existing client at correct spot on table
             }
             else
             {
-                connection.Insert(client); // inserts the item
-            }
+                return connection.InsertAsync(client); // will insert new client at end of table
+            }                            
         }
-        public List<ClientTable> GetClients() // Item = table name
+        public Task<List<ClientTable>> GetAllClientsAsync() 
         {
-            return connection.Table<ClientTable>().ToList(); // fetches all data and returns the items as a list
+            return connection.Table<ClientTable>().ToListAsync(); // will return the entire table
         }
-        public void DeleteClient(ClientTable client) // deletes the item from the database
+
+        public Task<ClientTable> GetAClientAsync(int customerID) //return a single client row from table
         {
-             connection.Delete(client); // deletes the item
+            return connection.Table<ClientTable>().Where(i => i.customerID == customerID).FirstOrDefaultAsync();
+        }        
+  
+        public Task<int> DeleteClientAsync(ClientTable client) // deletes the client from the table
+        {
+             return connection.DeleteAsync(client); 
         }
        
-        public  ClientTable GetClient(int customerID) // fetches a single item with the matching id that is passed into the method
-        {
-            return connection.Table<ClientTable>().Where(i => i.customerID == customerID).FirstOrDefault(); // returns the first or the default data
-        }
+       
 
         //These sql commands are to manipulate the BooksTable
 
 
 
-        public void InsertBook(BookTable book) // saves the item to the database
+        public Task<int> InsertBookAsync(BookTable book) // saves book to the database, works same as InsertClients
         {
-            if (book.isbn != 0) // if the item already exists
+            if (book.isbn != 0) 
             {
-                connection.Insert(book); // updates the item
+                return connection.InsertAsync(book); 
             }
             else
             {
-                connection.Insert(book); // inserts the item
+                return connection.InsertAsync(book); 
             }
         }
-        public List<BookTable> GetBooks() // Item = table name
+
+        public Task<List<BookTable>> GetAllBooksAsync() //returns list with all books from the books table
         {
-            return connection.Table<BookTable>().ToList(); // fetches all data and returns the items as a list
-        }
-        public void DeleteBook(BookTable book) // deletes the item from the database
-        {
-            connection.Delete(book); // deletes the item
+            return connection.Table<BookTable>().ToListAsync(); 
         }
 
-        public BookTable GetBook(int isbn) // fetches a single item with the matching id that is passed into the method
+        public Task<BookTable> GetASingleBook(int isbn) // fetches a single book with the matching isbn through as an argument
         {
-            return connection.Table<BookTable>().Where(i => i.isbn == isbn).FirstOrDefault(); // returns the first or the default data
+            return connection.Table<BookTable>().Where(i => i.isbn == isbn).FirstOrDefaultAsync(); // will return the first book found matching in the list
+        }
+
+        public Task DeleteBookAsync(BookTable book) // deletes the book from the book database
+        {
+            return connection.DeleteAsync(book); 
         }
 
 

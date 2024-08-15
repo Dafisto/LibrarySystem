@@ -1,6 +1,6 @@
 ﻿using LibrarySystem.ClassPackage.Persistence;
 using Microsoft.Extensions.Logging;
-using LibrarySystem.ClassPackage.Domain;
+
 
 namespace LibrarySystem
 {
@@ -22,7 +22,7 @@ namespace LibrarySystem
     		builder.Services.AddBlazorWebViewDeveloperTools();
     		builder.Logging.AddDebug();
 #endif
-            var dbPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "alexandriaDataBase.db");
+            var dbPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "alexandriaDB.db");
             builder.Services.AddSingleton<LibraryDB>(s => ActivatorUtilities.CreateInstance<LibraryDB>(s, dbPath));
             builder.Services.AddSingleton<ClientTable>();
             builder.Services.AddSingleton<BookTable>();

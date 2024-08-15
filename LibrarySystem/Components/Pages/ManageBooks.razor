@@ -105,7 +105,7 @@
         quantityInput = "Empty";
     }
 
-    private void InsertBook()
+    private async Task InsertBook()
     {
         BookTable book = new BookTable
             {
@@ -117,22 +117,22 @@
                 quantity = Int32.Parse(quantityInput)
             };
 
-        Connection.InsertBook(book);
+        await Connection.InsertBookAsync(book);
         isbnInput = "Empty";
         titleInput = "Empty";
         authorInput = "Empty";
         availabilityInput = "Empty";
         quantityInput = "Empty";
     }
-    private void FindBook()
+    private async Task FindBook()
     {
-        List<BookTable> bookList = Connection.GetBooks();
+        bookList = await Connection.GetAllBooksAsync();
     }
-    private void DeleteBook(BookTable book) // method to delete an item
+    private async Task DeleteBook(BookTable book) // method to delete an item
     {
         try
         {           
-            Connection.DeleteBook(book);            
+            await Connection.DeleteBookAsync(book);            
         }
         catch (Exception ex) // error message if the item cannot be deleted
         {

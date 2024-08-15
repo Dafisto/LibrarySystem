@@ -91,7 +91,8 @@
         cityInput = "Empty";
         searchInput = "Any";
     }
-    private void InsertClient()    
+
+    private async Task InsertClient()    
     {
         ClientTable client = new ClientTable
             {
@@ -100,14 +101,14 @@
                 lastName = lastNameInput,
                 city = cityInput
             };
-        Connection.InsertClient(client);
+        await Connection.InsertClientAsync(client);
         firstNameInput = "Empty";
         lastNameInput = "Empty";
         cityInput = "Empty";
     }
-    private void FindClients()
+    private async Task FindClients()    
     {
-        List<ClientTable> clientList = Connection.GetClients();
+        clientList = await Connection.GetAllClientsAsync();
     }
 
 
@@ -115,7 +116,7 @@
     {
         try
         {            
-            Connection.DeleteClient(client);
+            Connection.DeleteClientAsync(client);
         }
         catch (Exception ex) // error message if the item cannot be deleted
         {

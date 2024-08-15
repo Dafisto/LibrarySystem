@@ -1,5 +1,151 @@
-﻿<h3>Component1</h3>
+﻿@*@page "/CheckOutManager"
+@inject ClientTable clients
+@inject LibraryDB Connection
+@inject BookTable books
+@inject CheckoutTable Checkouts
+@using LibrarySystem.ClassPackage.Domain
+@using LibrarySystem.ClassPackage.Persistence
 
-@code {
 
-}
+<h1>Book Checkout/Checkin</h1>
+
+<p>"Checkout or return a book"</p>
+
+
+<label>
+    Borrow ID:
+    <InputText @bind-Value="holdingValue" readonly />
+</label>
+
+<label>
+    Customer ID:
+    <InputText @bind-Value="customerIDinput" />
+</label>
+
+<label>
+    ISBN:
+    <InputText @bind-Value="isbnInput" />
+</label>
+
+<button class="btn btn-primary" @onclick="insertCheckout">Borrow Book</button>
+
+<label>
+    Search Client:
+    <InputText @bind-Value="searchInput" />
+</label>
+<button class="btn btn-primary" @onclick="FindClients">Search for Clients</button>
+
+<h2>Return Book</h2>
+
+<label>
+    Borrow ID:
+    <InputText @bind-Value="holdingValue" readonly />
+</label>
+
+<label>
+    Customer ID:
+    <InputText @bind-Value="customerIDinput" />
+</label>
+
+<label>
+    ISBN:
+    <InputText @bind-Value="isbnInput" />
+</label>
+
+<label>
+    Borrow ID:
+    <InputText @bind-Value="holdingValue" readonly />
+</label>
+
+<h2>Find Active Checkouts</h2>
+
+<h1>Found Checkouts</h1>
+<table>
+    <thead>
+        <tr>
+            <th>Client ID</th>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>City</th>
+        </tr>
+    </thead>
+    <tbody>
+        @*if statement, if the list is empty no items will be displayed.*@
+     @*   @if (clientList != null)
+        {
+            @*when there are items, they will be displayed using this information*@
+ @*           @foreach (var person in clientList)
+            {
+                <tr>
+                    <td>@person.customerID</td>
+                    <td>@person.firstName</td>
+                    <td>@person.lastName</td>
+                    <td>@person.city</td>
+                    <td>
+                        <a href="/AddEditItem/@person.customerID" class="btn btn-warning">Edit Client</a> @*link/button to adit an item*@
+       @*                 <button class="btn btn-sm btn-danger" @onclick="()=>DeleteClient(person)">Delete Client</button> @*link/button that will delete the specified item*@
+            @*        </td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>*@
+
+
+
+
+
+@code 
+{}
+    @*
+    private string holdingValue = "Blank";
+    private int randomBorrowID { get; set; } = 0;
+    private string firstNameInput { get; set; } = string.Empty;
+    private string lastNameInput { get; set; } = string.Empty;
+    private string cityInput { get; set; } = string.Empty;
+    private string searchInput;
+    private List<ClientTable> clientList;
+    private string errorMessage;
+
+    protected override void OnInitialized()
+    {
+        firstNameInput = "Empty";
+        lastNameInput = "Empty";
+        cityInput = "Empty";
+        searchInput = "Any";
+    }
+    private void InsertClient()
+    {
+        ClientTable client = new ClientTable
+            {
+                customerID = IDRandomizer,
+                firstName = firstNameInput,
+                lastName = lastNameInput,
+                city = cityInput
+            };
+        Connection.InsertClient(client);
+        firstNameInput = "Empty";
+        lastNameInput = "Empty";
+        cityInput = "Empty";
+    }
+    private void FindClients()
+    {
+        List<ClientTable> clientList = Connection.GetClients();
+    }
+
+
+    private void DeleteClient(ClientTable client) // method to delete an item
+    {
+        try
+        {
+            Connection.DeleteClient(client);
+        }
+        catch (Exception ex) // error message if the item cannot be deleted
+        {
+            errorMessage = ex.Message;
+        }
+
+    }
+
+
+}*@
