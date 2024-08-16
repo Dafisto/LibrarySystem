@@ -15,7 +15,7 @@ namespace LibrarySystem.ClassPackage.Persistence
         public int isbn { get; set; }
         [Column("Title")]
         public string title { get; set; }
-        [Column("Author")]     
+        [Column("Author")]
         public string author { get; set; }
         public string genre {  get; set; }
         public bool available { get; set; }

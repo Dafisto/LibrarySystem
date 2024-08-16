@@ -25,22 +25,32 @@ namespace LibrarySystem.ClassPackage.Persistence
             connection.CreateTableAsync<ClientTable>().Wait(); // client = table name(constructor class for clientTable has parameters for table creation)
             connection.CreateTableAsync<BookTable>().Wait();  // book = book table name (constructor class for bookTable will have all parameters for table creation)
             connection.CreateTableAsync<CheckoutTable>().Wait(); // Checkout = checkout table name (constructor class for chekcoutTable will have the parameters for table creation)
-                   
         }
+
+        //static void ReadInSQLScripts(SQLiteAsyncConnection connection, string bookScript, string clientScript)
+        //{
+        //    SQLiteCommand sqlite_cmd;
+        //    string scriptForBooks = File.ReadAllText(bookScript);
+        //    string scriptForClients = File.ReadAllText(clientScript);
+        //    sqlite_cmd = connection.AsyncCommand();                                              // this is for if there is a need to run sql script
+        //    sqlite_cmd.CommandText = scriptForBooks + scriptForClients;
+        //    connection.QueryAsync<ClientTable>(clientScript);
+        //}
+
         //The sql commands for client table manipulation
-      //  connection.QueryAsync<BookTable>($"start {}");
+        //  connection.QueryAsync<BookTable>($"start {}");
         public Task<int> InsertClientAsync(ClientTable client) // This will save client to client database or update the client
         {
-            if(client.customerID != 0)
+            if (client.customerID != 0)
             {
                 return connection.UpdateAsync(client);  //updates existing client at correct spot on table
             }
             else
             {
                 return connection.InsertAsync(client); // will insert new client at end of table
-            }                            
+            }
         }
-        public Task<List<ClientTable>> GetAllClientsAsync() 
+        public Task<List<ClientTable>> GetAllClientsAsync()
         {
             return connection.Table<ClientTable>().ToListAsync(); // will return the entire table
         }
@@ -48,14 +58,14 @@ namespace LibrarySystem.ClassPackage.Persistence
         public Task<ClientTable> GetAClientAsync(int customerID) //return a single client row from table
         {
             return connection.Table<ClientTable>().Where(i => i.customerID == customerID).FirstOrDefaultAsync();
-        }        
-  
+        }
+
         public Task<int> DeleteClientAsync(ClientTable client) // deletes the client from the table
         {
-             return connection.DeleteAsync(client); 
+            return connection.DeleteAsync(client);
         }
-       
-       
+
+
 
         //These sql commands are to manipulate the BooksTable
 
@@ -63,19 +73,19 @@ namespace LibrarySystem.ClassPackage.Persistence
 
         public Task<int> InsertBookAsync(BookTable book) // saves book to the database, works same as InsertClients
         {
-            if (book.isbn != 0) 
+            if (book.isbn != 0)
             {
-                return connection.InsertAsync(book); 
+                return connection.InsertAsync(book);
             }
             else
             {
-                return connection.InsertAsync(book); 
+                return connection.InsertAsync(book);
             }
         }
 
         public Task<List<BookTable>> GetAllBooksAsync() //returns list with all books from the books table
         {
-            return connection.Table<BookTable>().ToListAsync(); 
+            return connection.Table<BookTable>().ToListAsync();
         }
 
         public Task<BookTable> GetASingleBook(int isbn) // fetches a single book with the matching isbn through as an argument
@@ -85,8 +95,9 @@ namespace LibrarySystem.ClassPackage.Persistence
 
         public Task DeleteBookAsync(BookTable book) // deletes the book from the book database
         {
-            return connection.DeleteAsync(book); 
+            return connection.DeleteAsync(book);
         }
+
 
 
         //  This section is for database manipulation of the checkout table. 
@@ -108,7 +119,7 @@ namespace LibrarySystem.ClassPackage.Persistence
         }
         public Task<List<CheckoutTable>> GetAllBookMarksAsync() //returns list with all books from the books table
         {
-            return connection.Table<CheckMark>().ToListAsync();
+            return connection.Table<CheckOut>().ToListAsync();
         }
 
         public Task<BookTable> GetASingleBookMark(int isbn) // fetches a single book with the matching isbn through as an argument
@@ -120,6 +131,5 @@ namespace LibrarySystem.ClassPackage.Persistence
         {
             return connection.DeleteAsync(book);
         }
-
     }
 }

@@ -19,7 +19,7 @@
 
 <label>
     Customer ID:
-    <InputText @bind-Value="customerIDinput" />
+    <InputText @bind-Value="customerIDinput"/>
 </label>
 
 <label>
@@ -27,7 +27,7 @@
     <InputText @bind-Value="isbnInput" />
 </label>
 
-<button class="btn btn-primary" @onclick="insertCheckout">Borrow Book</button>
+<button class="btn btn-primary" @onclick="InsertCheckout">Borrow Book</button>
 
 <label>
     Search Client:
@@ -39,17 +39,17 @@
 
 <label>
     Borrow ID:
-    <InputText @bind-Value="holdingValue" readonly />
+    <InputText @bind-Value="holdingValue" />
 </label>
 
 <label>
     Customer ID:
-    <InputText @bind-Value="customerIDinput" />
+    <InputText @bind-Value="customerIDinputReturn" />
 </label>
 
 <label>
     ISBN:
-    <InputText @bind-Value="isbnInput" />
+    <InputText @bind-Value="isbnInput" readonly/>
 </label>
 
 <label>
@@ -70,75 +70,71 @@
         </tr>
     </thead>
     <tbody>
-        @*if statement, if the list is empty no items will be displayed.*@
-     @*   @if (clientList != null)
+        
+        @if (borrowList != null)
         {
-            @*when there are items, they will be displayed using this information*@
- @*           @foreach (var person in clientList)
+           @foreach (var rental in borrowList)
             {
                 <tr>
-                    <td>@person.customerID</td>
-                    <td>@person.firstName</td>
-                    <td>@person.lastName</td>
-                    <td>@person.city</td>
+                    <td>@rental.rentalCode</td>
+                    <td>@rental.customerID</td>
+                    <td>@rental.isbn</td>                    
                     <td>
-                        <a href="/AddEditItem/@person.customerID" class="btn btn-warning">Edit Client</a> @*link/button to adit an item*@
-       @*                 <button class="btn btn-sm btn-danger" @onclick="()=>DeleteClient(person)">Delete Client</button> @*link/button that will delete the specified item*@
-            @*        </td>
+                        <a href="/AddEditItem/@rental.customerID" class="btn btn-warning">Edit Client</a> 
+                        <button class="btn btn-sm btn-danger" @onclick="()=>DeleteBorrow(rental)">Delete Client</button> 
+                    </td>
                 </tr>
             }
         }
     </tbody>
-</table>*@
+</table>
 
 
 
 
 
 @code 
-{}
-    
+{
     private string holdingValue = "Blank";
     private int randomBorrowID { get; set; } = 0;
-    private string firstNameInput { get; set; } = string.Empty;
-    private string lastNameInput { get; set; } = string.Empty;
+    private string customerIDinput { get; set; } = string.Empty;
+    private string isbnInput { get; set; } = string.Empty;
     private string cityInput { get; set; } = string.Empty;
     private string searchInput;
-    private List<ClientTable> clientList;
+    private List<CheckoutTable> borrowList;
     private string errorMessage;
+    private string customerIDinputReturn;
+
 
     protected override void OnInitialized()
-    {
-        firstNameInput = "Empty";
-        lastNameInput = "Empty";
+    {        
+        customerIDinput = "Empty";
         cityInput = "Empty";
         searchInput = "Any";
     }
     private void InsertClient()
     {
-        ClientTable client = new ClientTable
+        CheckoutTable checkout = new CheckoutTable
             {
-                customerID = IDRandomizer,
-                firstName = firstNameInput,
-                lastName = lastNameInput,
-                city = cityInput
+                rentalCode = randomBorrowID,
+                customerID = Int32.Parse(customerIDinput),
+                isbn = Int32.Parse(isbnInput),
             };
-        Connection.InsertClient(client);
-        firstNameInput = "Empty";
-        lastNameInput = "Empty";
-        cityInput = "Empty";
+        Connection.InsertBookMark(checkout);
+        customerIDinput = "Empty";
+        isbnInput = "Empty";
     }
-    private void FindClients()
+
+    private async Task FindBook()
     {
-        List<ClientTable> clientList = Connection.GetClients();
+        borrowList = await Connection.GetAllBookMarksAsync();
     }
-
-
-    private void DeleteClient(ClientTable client) // method to delete an item
+    private async Task DeleteBorrow(BookTable book) // method to delete an item
     {
         try
         {
-            Connection.DeleteClient(client);
+            await Connection.DeleteBookAsync(book);
+            borrowList = await Connection.GetAllBookMarksAsync();
         }
         catch (Exception ex) // error message if the item cannot be deleted
         {
@@ -148,4 +144,4 @@
     }
 
 
-}
+    }

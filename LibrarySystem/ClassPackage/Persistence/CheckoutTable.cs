@@ -10,7 +10,7 @@ using SQLite;
 namespace LibrarySystem.ClassPackage.Persistence
 {
     
-    internal class CheckoutTable
+    public class CheckoutTable
     {
         [PrimaryKey, AutoIncrement]
         public int rentalCode { get; set; }        
