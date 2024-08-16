@@ -119,7 +119,7 @@ namespace LibrarySystem.ClassPackage.Persistence
         }
         public Task<List<CheckoutTable>> GetAllBookMarksAsync() //returns list with all books from the books table
         {
-            return connection.Table<CheckOut>().ToListAsync();
+            return connection.Table<CheckoutTable>().ToListAsync();
         }
 
         public Task<BookTable> GetASingleBookMark(int isbn) // fetches a single book with the matching isbn through as an argument
@@ -127,9 +127,9 @@ namespace LibrarySystem.ClassPackage.Persistence
             return connection.Table<BookTable>().Where(i => i.isbn == isbn).FirstOrDefaultAsync(); // will return the first book found matching in the list
         }
 
-        public Task DeleteBookMark(BookTable book) // deletes the book from the book database
+        public Task DeleteBookMarkAsync(CheckoutTable bookMark) // deletes the book from the book database
         {
-            return connection.DeleteAsync(book);
+            return connection.DeleteAsync(bookMark);
         }
     }
 }

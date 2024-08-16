@@ -33,7 +33,7 @@
     Search Client:
     <InputText @bind-Value="searchInput" />
 </label>
-<button class="btn btn-primary" @onclick="FindClients">Search for Clients</button>
+<button class="btn btn-primary" @onclick="FindBorrow">Search for Clients</button>
 
 <h2>Return Book</h2>
 
@@ -79,8 +79,7 @@
                     <td>@rental.rentalCode</td>
                     <td>@rental.customerID</td>
                     <td>@rental.isbn</td>                    
-                    <td>
-                        <a href="/AddEditItem/@rental.customerID" class="btn btn-warning">Edit Client</a> 
+                    <td>                         
                         <button class="btn btn-sm btn-danger" @onclick="()=>DeleteBorrow(rental)">Delete Client</button> 
                     </td>
                 </tr>
@@ -112,7 +111,7 @@
         cityInput = "Empty";
         searchInput = "Any";
     }
-    private void InsertClient()
+    private void InsertCheckout()
     {
         CheckoutTable checkout = new CheckoutTable
             {
@@ -125,15 +124,15 @@
         isbnInput = "Empty";
     }
 
-    private async Task FindBook()
+    private async Task FindBorrow()
     {
         borrowList = await Connection.GetAllBookMarksAsync();
     }
-    private async Task DeleteBorrow(BookTable book) // method to delete an item
+    private async Task DeleteBorrow(CheckoutTable bookMark) // method to delete an item
     {
         try
         {
-            await Connection.DeleteBookAsync(book);
+            await Connection.DeleteBookMarkAsync(bookMark);
             borrowList = await Connection.GetAllBookMarksAsync();
         }
         catch (Exception ex) // error message if the item cannot be deleted
