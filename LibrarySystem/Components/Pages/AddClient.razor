@@ -61,7 +61,7 @@
                     <td>@person.lastName</td>
                     <td>@person.city</td>                   
                     <td>
-                       <button class="btn btn-sm btn-danger" @onclick="()=>EditClient(person)">Delete Client</button>
+                      @* <button class="btn btn-sm btn-danger" @onclick="()=>EditClient(person)">Delete Client</button>*@
                         <button class="btn btn-sm btn-danger" @onclick="()=>DeleteClient(person)">Delete Client</button> 
                     </td>
                 </tr>
@@ -110,17 +110,10 @@
     {
         clientList = await Connection.GetAllClientsAsync();
     }
-    private async Task EditClient(ClientTable client)
-    {
-       client = client 
-            {   
-                customerID = client.customerID,
-                firstName = firstNameInput,
-                lastName = lastNameInput,
-                city = cityInput
-            };
-        await Connection.InsertClientAsync();
-    }
+    //private async Task EditClient(ClientTable client)
+    //{  
+   //     await Connection.InsertClientAsync();
+   // }
 
     private async Task DeleteClient(ClientTable client) // method to delete an item
     {
