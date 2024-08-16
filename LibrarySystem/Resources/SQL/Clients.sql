@@ -1,0 +1,15 @@
+﻿INSERT INTO CLIENTTABLE VALUES (1, 'Ethan', 'Carter', 'Seattle');
+INSERT INTO CLIENTTABLE VALUES(2, 'Olivia', 'Harris', 'Chicago');
+INSERT INTO CLIENTTABLE VALUES(3, 'Noah', 'Miller', 'Los Angeles');
+INSERT INTO CLIENTTABLE VALUES(4, 'Sophia', 'Anderson', 'New York');
+INSERT INTO CLIENTTABLE VALUES(5, 'Liam', 'Smith', 'Houston');
+INSERT INTO CLIENTTABLE VALUES(6, 'Ava', 'Johnston', 'Dallas');
+INSERT INTO CLIENTTABLE VALUES(7, 'William', 'Brown', 'Philidelphia');
+INSERT INTO CLIENTTABLE VALUES(8, 'Charlotte', 'Davis', 'Pheonix');
+INSERT INTO CLIENTTABLE VALUES(9, 'James', 'Wilson', 'San Antonio');
+INSERT INTO CLIENTTABLE VALUES(10, 'Amelia', 'Moore', 'San Diego');
+INSERT INTO CLIENTTABLE VALUES(11, 'Benjamin', 'Taylo', 'Las Vegas');
+INSERT INTO CLIENTTABLE VALUES(12, 'Mia', 'Anderson', 'Atlanta');
+INSERT INTO CLIENTTABLE VALUES(13, 'Lucas', 'Thomas', 'Indianapolis');
+INSERT INTO CLIENTTABLE VALUES(14, 'Emma', 'Jackson', 'Austin');
+INSERT INTO CLIENTTABLE VALUES(15, 'Alexander', 'White', 'Detroit');
