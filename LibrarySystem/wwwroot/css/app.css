@@ -93,3 +93,11 @@ label, input {
 select {
     width: 800px;
 }
+
+table {
+    border-collapse: separate; /* Necessary for border-spacing to work */
+    border-spacing: 10px 20px; /* Adjust the value as needed */
+}
+td {
+    padding: 5px;
+}

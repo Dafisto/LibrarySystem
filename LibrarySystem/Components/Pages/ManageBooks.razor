@@ -43,7 +43,7 @@
     Search Book:
     <InputText @bind-Value="searchInput" />
 </label>
-<button class="btn btn-primary" @onclick="FindBook">Search for Clients</button>
+<button class="btn btn-primary" @onclick="FindBook">Search for Books</button>
 
 <h1>Found Books</h1>
 <table>
@@ -80,6 +80,16 @@
         }
     </tbody>
 </table>
+<div>
+    @if (!string.IsNullOrEmpty(errMess))
+    {
+        <div class="alert alert-danger">@errMess</div>
+    }
+    @if (!string.IsNullOrEmpty(victoryMessage))
+    {
+        <div class="alert alertalert-success">@victoryMessage</div>
+    }
+</div>
 
 
 
@@ -94,7 +104,8 @@
     private string availabilityInput { get; set; } = string.Empty;
     private string searchInput;
     private List<BookTable> bookList;
-    private string errorMessage;
+    private string? errMess;
+    private string? victoryMessage;
 
     protected override void OnInitialized()
     {
@@ -107,26 +118,42 @@
 
     private async Task InsertBook()
     {
-        BookTable book = new BookTable
-            {
-                isbn = Int32.Parse(isbnInput),
-                title = titleInput,
-                author = authorInput,
-                genre = genreInput,
-                available = Convert.ToBoolean(availabilityInput),
-                quantity = Int32.Parse(quantityInput)
-            };
+        try
+        {
+            BookTable book = new BookTable
+                {
+                    isbn = Int32.Parse(isbnInput),
+                    title = titleInput,
+                    author = authorInput,
+                    genre = genreInput,
+                    available = Convert.ToBoolean(availabilityInput),
+                    quantity = Int32.Parse(quantityInput)
+                };
 
-        await Connection.InsertBookAsync(book);
-        isbnInput = "Empty";
-        titleInput = "Empty";
-        authorInput = "Empty";
-        availabilityInput = "Empty";
-        quantityInput = "Empty";
+            await Connection.InsertBookAsync(book);
+            isbnInput = "Empty";
+            titleInput = "Empty";
+            authorInput = "Empty";
+            availabilityInput = "Empty";
+            quantityInput = "Empty";
+        }
+        catch(Exception ex)
+        {
+            errMess = ex.Message;
+        }
+
     }
     private async Task FindBook()
     {
-        bookList = await Connection.GetAllBooksAsync();
+        try
+        {
+            bookList = await Connection.GetAllBooksAsync();
+        }
+        catch (Exception ex)
+        {
+            errMess = ex.Message;
+        }
+
     }
     private async Task DeleteBook(BookTable book) // method to delete an item
     {
@@ -137,7 +164,7 @@
         }
         catch (Exception ex) // error message if the item cannot be deleted
         {
-            errorMessage = ex.Message;
+            errMess = ex.Message;
         }
 
     }

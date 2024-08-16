@@ -55,18 +55,19 @@
         
             @if (clientList != null)
             {
-
-                <tr>
-                    <td>@person.customerID</td>
-                    <td>@person.firstName</td>
-                    <td>@person.lastName</td>
-                    <td>@person.city</td>                   
-                    <td>
-                      @* <button class="btn btn-sm btn-danger" @onclick="()=>EditClient(person)">Delete Client</button>*@
-                        <button class="btn btn-sm btn-danger" @onclick="()=>DeleteClient(person)">Delete Client</button> 
-                    </td>
-                </tr>
-
+                @foreach(var person in clientList)
+                {
+                    <tr>
+                        <td>@person.customerID</td>
+                        <td>@person.firstName</td>
+                        <td>@person.lastName</td>
+                        <td>@person.city</td>
+                        <td>
+                            @* <button class="btn btn-sm btn-danger" @onclick="()=>EditClient(person)">Delete Client</button>*@
+                            <button class="btn btn-sm btn-danger" @onclick="()=>DeleteClient(person)">Delete Client</button>
+                        </td>
+                    </tr>
+                }
             }
         </tbody>
     </table>
