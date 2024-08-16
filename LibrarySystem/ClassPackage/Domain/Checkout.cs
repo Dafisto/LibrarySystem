@@ -34,5 +34,10 @@ namespace LibrarySystem.ClassPackage.Domain
             this.customerID = customerID;
             this.isbn = isbn;           
         }
+
+        public override string ToString()
+        {
+            return$"{RentalCode}, {CustomerID}, {Isbn}";
+        }
     }
 }

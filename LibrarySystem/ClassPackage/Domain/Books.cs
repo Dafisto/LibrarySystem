@@ -48,5 +48,13 @@ namespace LibrarySystem.ClassPackage.Domain
             this.quantity = quantity;
             this.available = available;
         }
+        public override string ToString()
+        {
+            if (Isbn == null)
+            {
+                return "";
+            }
+            return $"{Isbn}, {Title}, {Author}, {Quantity}, {Available}";
+        }
     }
 }

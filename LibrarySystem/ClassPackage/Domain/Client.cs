@@ -43,6 +43,11 @@ namespace LibrarySystem.ClassPackage.Domain
             this.LastName = lastName;
             this.City = city;
         }  
+
+        public override string ToString()
+        {
+            return$"{CustomerID}, {FirstName}, {LastName}, {City}";
+        }
        
     }
 }
